@@ -1,0 +1,76 @@
+################################################################################################################
+# For after the exams:
+# 1) Printing a chosen number of eigenvalues (like in matlab code)
+# 2) Develop a GUI with pygame for package use -> maybe web development ?
+#    Read on pygame / web GUI
+#    Create
+# 3) Graph built only according to length of edges (without coordinates)
+# 4) Add animations of moving eigenfunctions
+################################################################################################################
+
+
+
+################################################################################################################
+# TODO:
+# 1) Writing lengths of created edges /*NOT DONE*/
+# 2) Updating adjacency matrix, graph drawing in the package /*DONE*/ (-> decide a scale /*NOT DONE*/).
+#    -> Find a way to identify a dot (its number) /*DONE*/
+# 3) Right click option opens a menu bar:
+#    a) Option of changing edges' length
+#    b) Option of removing a line / circle
+#    c) Option of displaying the lengths
+# 4) Adding option in Quantum Graph package to find k eigenvalues, while k is the number chosen for next
+#    step /*DONE*/
+# 5) Adding on top of the window the number of eigenvalue k we would like to use for eigenfunction drawing. 
+#    /*DONE*/
+# 6) Finding a way to transform this GUI into a web one (-> FLASK) /*NOT DONE*/
+# 7) Commenting /*DONE*/
+################################################################################################################
+
+
+
+################################################################################################################
+# Appointment of 25.08.2020:
+# 1) Deciding on a scale /*NOT IMPORTANT*/
+################################################################################################################
+
+
+
+################################################################################################################
+# Appointment of 25.08.2020 conclusion:
+# 1) Add option of drawing secular determinant (button appearing when start is pressed) /*DONE*/
+# 2) Add "RESET" button /*DONE*/
+# 3) Add line of eigenvalues on which we can click to draw eigenfunctions /*DONE*/
+# 4) Convert into executable file (to avoid need of python's installation for users)
+################################################################################################################
+
+
+
+################################################################################################################
+# Appointment of 01.09.2020 conclusion:
+# 1) Add instructions' box /*DONE*/
+# 2) Add real 0 eigenvalue as 0-th eigenvalue /*DONE*/
+# 3) Add possibility of Dirichlet condition (a node becomes green) 
+# 4) Add possibility to extend window of the game /* INTERNAL ADJUSTMENTS DONE*/
+# 5) Double click for dragging a node to a new place
+# 6) Fix Secular determinant pbs (drawn 2 times + False not always acquired) /*DONE*/
+# 7) Convert into executable file (to avoid need of python's installation for users) /*DONE*/
+# 8) Add "BACK" button /*DONE*/
+# 9) Handle the exceptions of out-of-frame
+# 10) Handle the exceptions of infinite loop for sec det (when a loop graph is drawn)
+# 11) Comment
+################################################################################################################
+
+
+
+################################################################################################################
+# Appointment of 08.09.2020 conclusion:
+# 1) Add Nyqist rate for sampling /*DONE*/
+# 2) Add possibility of Dirichlet condition (a node becomes green) /*DONE*/
+# 3) Change color of the nodes in the graph quantum package /*DONE*/
+# 4) Double click for dragging a node to a new place
+# 5) Handle the exceptions of out-of-frame
+# 6) Handle the exceptions of infinite loop for sec det (when a loop graph is drawn) /*DONE*/
+# 7) Display value of eigenvalue when mouse on it /*DONE*/
+# 8) Comment
+################################################################################################################
