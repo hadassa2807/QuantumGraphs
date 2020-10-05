@@ -179,18 +179,13 @@ class QuantumGraph:
            for j in range(0,2*Nb_tot):
                # If both edges i and j are the inverse of each other then we set the value of the S matrix at (i,j) to 2/dv-1 
                if ((self.graph_characteristics[1][i] == self.graph_characteristics[0][j]) and (self.graph_characteristics[0][i] == self.graph_characteristics[1][j])):
-                   # Dirichlet condition -> we set the value of the S matrix at (i,j) to -1
                    if (dv[int(self.graph_characteristics[0][j])]==1): 
                        S[i][j]=-1
                    else:
                        S[i][j]=(2/self.Nb_edges[int(self.graph_characteristics[1][i])])-1
-               # Otherwise, if the edges are adjacent, then we set the value of the S matrix at (i,j) to 2/dv
+                # Otherwise, if the edges are adjacent, then we set the value of the S matrix at (i,j) to 2/dv
                elif self.graph_characteristics[1][i] == self.graph_characteristics[0][j]:
-                   if (dv[int(self.graph_characteristics[0][j])]==0):
-                        S[i][j]=2/self.Nb_edges[int(self.graph_characteristics[1][i])]
-                   # Dirichlet condition -> we set the value of the S matrix at (i,j) to 0
-                   else: 
-                       S[i][j]=0
+                   S[i][j]=2/self.Nb_edges[int(self.graph_characteristics[1][i])]
         return S
 
     """
@@ -373,8 +368,12 @@ class QuantumGraph:
     If a specific number of eigenvalue is not specified, all the eigenvalues (in a specific interval of possibilities found
     or chosen previously) are taken in consideration to plot the possible combinations of eigenfunctions.
     """
-    def EigFunc3D_aux(self,k, ax):    
-
+    def EigFunc3D_aux(self,k):
+        # Setting the plotting space for the quantum graph.
+        fig = plt.figure()
+        ax = plt.axes(projection="3d")
+            
+        # Plotting the quantum graph (vertices and edges) in the 3D space.
         # Finding and plotting the vertices
         X = np.zeros(int(self.NbNodes))
         Y = np.zeros(int(self.NbNodes))
@@ -390,7 +389,6 @@ class QuantumGraph:
         # Plotting the edges (connecting the vertices according to the adjacency matrix)
         for i in range(0, int(2*self.TotEdges), 2):
             self.connectpoints(X,Y,int(self.graph_characteristics[0][i]),int(self.graph_characteristics[1][i]))
-        
 
         # Setting the current eigenvalue used and the coefficients of the eigenfunctions (in the array eigvec)
         # The coefficients are chosen as the items of the eigenvector corresponding to the lowest eigenvalue of the secular determinant
@@ -429,13 +427,13 @@ class QuantumGraph:
             # We calculate and draw the eigenfunction upon the edge
             eigenfun = (eigvec[edge_number]*np.exp(1j*Curr_eigval*(edge_length-t)) + eigvec[edge_number+1]*np.exp(1j*Curr_eigval*(t))).real          
             ax.plot(X, Y, eigenfun, color='red')
-        
+
         # Setting title, labels, and plotting
         ax.set_title("eigenfunc for eigenvalue %i:" %(k))
         ax.set_xlabel('x')
         ax.set_ylabel('y')
         ax.set_zlabel('z')
-
+        plt.show()
 
     """
     The following method aims to plot the eigenfunctions of each edge of the graph, in the 3D space of the quantum graph.
@@ -443,24 +441,11 @@ class QuantumGraph:
     All the eigenvalues are taken in consideration to plot the possible combinations of eigenfunctions.
     """
     def EigFuncPlot3D(self):
-        fig = plt.figure()
-        # Setting the plotting space for the quantum graph
-        if (int(np.sqrt(len(self.EigenVal))) == np.sqrt(len(self.EigenVal))):
-            nb_cols = int(np.sqrt(len(self.EigenVal)))
-        else:
-            nb_cols = int(np.sqrt(len(self.EigenVal))) + 1
-        nb_rows = math.ceil(len(self.EigenVal)/nb_cols)
         if self.num_eigval==None:
-            for k in range(0, len(self.EigenVal)-1):
-                ax = fig.add_subplot(nb_rows, nb_cols, k+1, projection="3d")
-                self.EigFunc3D_aux(k, ax)
+            for k in range(0, len(self.EigenVal)):
+                self.EigFunc3D_aux(k)
         else:
-            print("here1: ", self.num_eigval)
-            ax = fig.add_subplot(1,1,1,projection="3d")
-            self.EigFunc3D_aux(self.num_eigval, ax)
-            print("here2")
-        plt.show()
-
+            self.EigFunc3D_aux(self.num_eigval)
 
 
     """

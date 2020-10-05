@@ -11,9 +11,6 @@ import numpy as np
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
-import matplotlib.pyplot as plt
-from mpl_toolkits import mplot3d
-from mpl_toolkits.mplot3d import Axes3D
 from QuantumGraphs import QuantumGraph
 
 # Tupples
@@ -33,7 +30,6 @@ BLACK = (0, 0, 0, 255)
 GREEN = (0, 255, 0, 255)
 BLUE = (0, 0, 255, 255)
 RED = (255, 0, 0, 255)
-YELLOW = (255, 255, 0, 255)
 
 # Sizes
 screen_width = 800
@@ -53,11 +49,6 @@ class Node:
     def connect_nodes(self, node):
         self.neighbors.append(node)
 
-def closest_root(N):
-    rN = np.sqrt(N)
-    integN = int(rN)
-    if integN == rN: return integN
-    else: return integN+1
 
 '''
 The following function returns closest tenth to a number (x)
@@ -381,15 +372,6 @@ def start_state(screen, instr_button, game_button, credit_button, screen_state, 
 
     return screen_state
 
-def choosing_eigenvals(screen, eigval, chosen_evs):
-    ev = get_node(eigval.pos, chosen_evs)
-    if ev == None:
-        pygame.draw.circle(screen, YELLOW, eigval.pos, 3)
-        chosen_evs.append(eigval)
-    else:
-        chosen_evs.remove(ev)
-        pygame.draw.circle(screen, RED, eigval.pos, 3)
-    return chosen_evs
 '''
 Main function
 '''
@@ -477,7 +459,6 @@ def main():
             # We ask the user to enter a number of eigenvalues he wants to compute, and draw an axis containing them.
             if start == True:
                 QG, eigvals = start_QG(screen, Coord_list, Num_eigval, Nodes, screen_width,draw_sec_det, SecDet_button, d_vertices)
-                chosen_evs = []
                 start_pressed = False
                 start = False
                 start2 = True
@@ -495,10 +476,6 @@ def main():
                     text = "eigenvalue = " + str(QG.EigenVal[eigval.number])
                     add_text(screen, text, int(screen_width/3), 0, size=20)
                     if event.type == MOUSEBUTTONDOWN:
-                        chosen_evs = choosing_eigenvals(screen, eigval, chosen_evs)
-                elif (event.type == pygame.KEYDOWN):
-                    key_name = pygame.key.name(event.key) 
-                    if key_name=="return":
                         start2 = False
                         start3 = True
                 # If the mouse is not on an eigenvalue node, we don't display any value of eigenvalue.
@@ -506,18 +483,7 @@ def main():
                     draw_grid(screen, int(screen_width), 30, 0, 0)
             # Computing the eigenfunctions and going back to drawing state (to continue drawing).
             elif start3 == True:
-                 if QG != None and chosen_evs != []: 
-                     fig = plt.figure()
-                     cnt=1
-                     SizeEv = len(chosen_evs)
-                     nb_cols = closest_root(SizeEv) 
-                     nb_rows = math.ceil(SizeEv/nb_cols) 
-                     for eigval in chosen_evs:
-                        ax = fig.add_subplot(nb_rows, nb_cols, cnt, projection='3d')
-                        QG.EigFunc3D_aux(eigval.number, ax)
-                        cnt+=1
-                 plt.show()
-
+                 if QG != None: QG.EigFunc3D_aux(eigval.number)
                  draw_grid(screen, int(screen_width), 60, 0, 0)
                  draw_sec_det = False
                  start3 = False
