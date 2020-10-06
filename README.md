@@ -9,7 +9,7 @@ You can simulate some quantum graphs properties (sketching a graph with differen
 In this section, you don't need to have Python installed.
 
 You can simulate the program via the application created for the project in the link:
-https://drive.google.com/file/d/1HiQhbUaETrxe_C40L2CvYxYkm3zfIfFy/view?usp=sharing
+https://drive.google.com/file/d/1jmWkmROrZHvpwDst4i9GiLGv8w6pldS2/view?usp=sharing
 
 By following the steps:
 - Download and extract the zip folder.
