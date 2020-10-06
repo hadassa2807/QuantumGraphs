@@ -53,6 +53,9 @@ class Node:
     def connect_nodes(self, node):
         self.neighbors.append(node)
 
+'''
+The following function returns closest upper root for a number
+'''
 def closest_root(N):
     rN = np.sqrt(N)
     integN = int(rN)
@@ -230,6 +233,7 @@ def start_QG(screen, Coord_list, Num_eigval, Nodes, screen_width, draw_sec_det, 
         # If the user chose to display the secular determinant, we listen to him
         if (draw_sec_det == True): QG.SecularDetPloting()
         return QG, ev_placed
+
     # Procedure while catching an exception (ending with exiting the program)
     except Exception as ex:
         # Infinite loop exception. Main cause: infinite loop while searching the eigenvalues.
@@ -295,8 +299,8 @@ def display_instr(screen):
     add_text(screen, "-> When your graph is ready, click on START;", 0, 6*step+2*NL, WHITE)
     add_text(screen, "   Enter the number of eigenvalues you want to compute.", 0, 7*step+2*NL, WHITE)
     add_text(screen, "   If you want to draw the secular determinant click on SEC DET.", 0, 8*step+2*NL, WHITE)
-    add_text(screen, "   Press ENTER and click on the eigenvalue you want to compute", 0, 9*step+2*NL, WHITE)
-    add_text(screen, "   Now appear the eigenfunctions drawn upon your graph", 0, 10*step+2*NL, WHITE)
+    add_text(screen, "   Press ENTER and click on the eigenvalues you want to compute", 0, 9*step+2*NL, WHITE)
+    add_text(screen, "   Press ENTER to plot the eigenfunctions drawn upon your graph", 0, 10*step+2*NL, WHITE)
     add_text(screen, "-> Continue or draw a new graph by clicking on RESTART", 0, 11*step+3*NL, WHITE)
 
 """
@@ -378,18 +382,24 @@ def start_state(screen, instr_button, game_button, credit_button, screen_state, 
                    return GAME
            else: create_button(screen, game_button, "GAME", WHITE)  
        pygame.display.update()
-
     return screen_state
 
+"""
+The following function aims to take/remove a choice of eigenvalue from the user. A yellow node means the eigenvalue
+is chosen, while a red one means it is not chosen.
+"""
 def choosing_eigenvals(screen, eigval, chosen_evs):
     ev = get_node(eigval.pos, chosen_evs)
+    # A new node has been chosen, meaning we add it from the list of eigenvalues we want to compute.
     if ev == None:
         pygame.draw.circle(screen, YELLOW, eigval.pos, 3)
         chosen_evs.append(eigval)
+    # An existing node has been chosen, meaning we remove it from the list of eigenvalues we want to compute.
     else:
         chosen_evs.remove(ev)
         pygame.draw.circle(screen, RED, eigval.pos, 3)
     return chosen_evs
+
 '''
 Main function
 '''
@@ -425,10 +435,12 @@ def main():
         keys = pygame.key.get_pressed()
         for event in pygame.event.get():
             starting = start or start_pressed or start2 or start3
+
         	# Exiting the program
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+
             # Actions according to the state of the screen
             elif screen_state == START:
                 screen_state = start_state(screen, instr_button, game_button, credit_button, screen_state, background_image)
@@ -439,6 +451,7 @@ def main():
             elif screen_state == GAME:
                 Nodes, number, Coord_list, start_pressed, start, d_vertices = init_state(screen, start_button, restart_button, back_button)
                 screen_state = PREDRAW
+
             # Actions while pressing the mouse button down in the GAME state
             if (event.type == MOUSEBUTTONDOWN and event.button == LEFT and screen_state >= GAME):
                     mouse_pos_beg = pygame.mouse.get_pos()
@@ -459,6 +472,7 @@ def main():
                     # Pressing the back button brings the user to the introduction screen (clearing the graph in the same time)
                     elif back_button.collidepoint(mouse_pos_beg) == True:
                         back = True 
+                        Nodes, number, Coord_list, start_pressed, start, d_vertices = init_state(screen, start_button, restart_button, back_button)
                         screen_state = START
                     # Else, we draw a node at the position of the mouse
                     elif starting == False:
@@ -485,39 +499,46 @@ def main():
                 if QG == None:
                     start3 = True
                     start2 = False
+
             # After computing the axis with eigenvalues, we can go through one by placing the mouse on it (then we display the value 
             # of that eigenvalue) or clicking on it to start computing the eigenfunctions corresponding upon the graph. 
             elif start2 == True:
                 mouse_pos_beg = pygame.mouse.get_pos()
                 pos = get_legal_pos(mouse_pos_beg)
                 eigval = get_node(pos, eigvals)
-                if (eigval != None):
-                    text = "eigenvalue = " + str(QG.EigenVal[eigval.number])
-                    add_text(screen, text, int(screen_width/3), 0, size=20)
-                    if event.type == MOUSEBUTTONDOWN:
-                        chosen_evs = choosing_eigenvals(screen, eigval, chosen_evs)
-                elif (event.type == pygame.KEYDOWN):
+                # We press ENTER, meaning we want to start computing the graph(s).
+                if (event.type == pygame.KEYDOWN):
                     key_name = pygame.key.name(event.key) 
                     if key_name=="return":
                         start2 = False
                         start3 = True
+                # The mouse is on an eigenvalue, so we display its value on the screen.
+                if (eigval != None):
+                    text = "eigenvalue = " + str(QG.EigenVal[eigval.number])
+                    add_text(screen, text, int(screen_width/3), 0, size=20)
+                    # We clicked on an eigenvalue (so we add or remove it according to its state from the list of chosen eigenvalues)
+                    if event.type == MOUSEBUTTONDOWN:
+                        chosen_evs = choosing_eigenvals(screen, eigval, chosen_evs)
                 # If the mouse is not on an eigenvalue node, we don't display any value of eigenvalue.
                 else: 
                     draw_grid(screen, int(screen_width), 30, 0, 0)
+
             # Computing the eigenfunctions and going back to drawing state (to continue drawing).
             elif start3 == True:
                  if QG != None and chosen_evs != []: 
                      fig = plt.figure()
                      cnt=1
                      SizeEv = len(chosen_evs)
+                     # We create a matrix of subplots, such that it is the closest to a squared matrix.
                      nb_cols = closest_root(SizeEv) 
                      nb_rows = math.ceil(SizeEv/nb_cols) 
+                     # Computing the subplots of eigenfunctions
                      for eigval in chosen_evs:
                         ax = fig.add_subplot(nb_rows, nb_cols, cnt, projection='3d')
                         QG.EigFunc3D_aux(eigval.number, ax)
                         cnt+=1
                  plt.show()
-
+                 # We can remove the axis of eigenvalues and continue sketching the graph.
                  draw_grid(screen, int(screen_width), 60, 0, 0)
                  draw_sec_det = False
                  start3 = False
@@ -551,10 +572,12 @@ def main():
                     if Start_node != None and Start_node.pos == mouse_pos_end: releasing = False
                     else: releasing = True
                     End_node = create_node(screen, mouse_pos_end, Nodes, Coord_list, d_vertices, releasing)
+                    # If the ending node is different from the starting node, we connect them.
                     if Start_node != None and Start_node.pos != End_node.pos:
                         Start_node.connect_nodes(End_node)
                         End_node.connect_nodes(Start_node)
                         pygame.draw.line(screen, BLACK, Start_node.pos, End_node.pos, 2)
+                    # Handling start's delays for sketching the graph.
                     if first_node == True: first_node = False
                     else: Start_node = None
                 
