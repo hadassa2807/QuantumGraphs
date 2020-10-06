@@ -431,7 +431,7 @@ class QuantumGraph:
             ax.plot(X, Y, eigenfun, color='red')
         
         # Setting title, labels, and plotting
-        ax.set_title("eigenfunc for eigenvalue %i:" %(k))
+        ax.set_title("For eigenvalue %i:" %(k))
         ax.set_xlabel('x')
         ax.set_ylabel('y')
         ax.set_zlabel('z')
@@ -505,6 +505,7 @@ class QuantumGraph:
         for i in range(0, int(self.TotEdges)):
             self.connectpoints(X,Y,int(self.graph_characteristics[0][i]),int(self.graph_characteristics[1][i]))
 
+
 # Here are some tests as examples for using the package  
 '''
 # Tests: 
@@ -538,13 +539,14 @@ F = [ [0, 1], [1, 0] ]
 coordF = [ [0, 0], [0, 1] ]
 DirichletF = [1, 1]
 
+# Initilizing the quantum graphs
 QuantGraph1 = QuantumGraph(4, A, coordA, 5, DirichletA);
 QuantGraph2 = QuantumGraph(3, B, coordB, 6, DirichletB);
 QuantGraph3 = QuantumGraph(3, C, coordC, 6, DirichletC);
 QuantGraph6 = QuantumGraph(2, F, coordF, 4, DirichletF);
 QuantGraph5 = QuantumGraph(4, E, coordE, 5, DirichletE)
 
-
+# Ploting the respective eigenfunctions
 QuantGraph1.EigFuncPlot3D()
 QuantGraph2.EigFuncPlot3D()
 QuantGraph3.EigFuncPlot3D()
