@@ -1,6 +1,6 @@
 # QuantumGraphs
 
-The current repository contains a package for quantum graphs numerical calculations and a GUI for simulations. I apologize in advance to all colorblind people who want to use this color based simulation. Feel free to share your issues / submit new ideas for improvements / contribute to this open-source project.
+The current repository contains a package for quantum graphs numerical calculations and a GUI for simulations. Feel free to share your issues / submit new ideas for improvements / contribute to this open-source project.
 
 ## Getting started:
 You can simulate some quantum graphs properties (sketching a graph with different boundary conditions, compute its eigenvalues and plot its eigenfunctions accordingly, display the secular determinant,...) by using the GUI created for this effect. There are two ways to do so:
